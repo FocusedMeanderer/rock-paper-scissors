@@ -36,7 +36,6 @@ weapons.forEach(weapon => {
 });
 
 function highlightWeapon(e) {
-  e.stopPropagation();
   const rock = document.querySelector("img.rock");
   const paper = document.querySelector("img.paper");
   const scissors = document.querySelector("img.scissors");
@@ -56,10 +55,11 @@ function highlightWeapon(e) {
     scissors.src = "img/Scissors-sel.png";
     scissorsLabel.style.color = "#ee7c51";
   }
+
+  e.stopPropagation();
 }
 
 function removeHighlight(e) {
-  e.stopPropagation();
   const rock = document.querySelector("img.rock");
   const paper = document.querySelector("img.paper");
   const scissors = document.querySelector("img.scissors");
@@ -79,13 +79,19 @@ function removeHighlight(e) {
     scissors.src = "img/Scissors-nbg.png";
     scissorsLabel.style.color = "#000";
   }
+
+  e.stopPropagation();
 }
 
 function playRound(e) {
-  e.stopPropagation();
 
   const computerChoice = getComputerChoice();
-  const userChoice = this.id;
+  const userChoice = e.currentTarget.id; /*
+                               this.id === e.currentTarget
+                               because we've set capture to true (deepest element first)
+                               in the click event of div.weapon, div.weapon would be the currentTarget
+                               even when we click on the image or p/text
+                               */
 
   const userChoiceCell = document.querySelector("td.userChoice");
   const computerChoiceCell = document.querySelector("td.computerChoice");
@@ -126,4 +132,6 @@ function playRound(e) {
     default:
       console.log("Error: This should never happen!");
   }
+
+  e.stopPropagation();
 }
