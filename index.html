@@ -4,32 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rock Paper Scissors</title>
-  <style>
-    body {
-      height: 100vh;
-      line-height: 1.5;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      text-align: center;
-    }
-
-    .container {
-      width: 80%;
-      height: 100%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body onclick="game()">
+<body>
   <div class="container">
     <h1>Rock, Paper, Scissors</h1>
-    <p>This is a simple game of rock, paper, scissors. Open the developer tools and view the results in the console pane.</p>
-    <p>Click anywhere on this page to start.</p>
+    <p>This is a simple game of rock, paper, scissors. You are playing against the computer.</p>
+    <p>Select your weapon:</p>
+    <div class="rps">
+      <div class="weapon" id="rock">
+        <img src="img/Rock-nbg.png" alt="Rock" class="rock" />
+        <p class="rock">Rock</p>
+      </div>
+      <div class="weapon" id="paper">
+        <img src="img/Paper-nbg.png" alt="Paper" class="paper" />
+        <p class="paper">Paper</p>
+      </div>
+      <div class="weapon" id="scissors">
+        <img src="img/Scissors-nbg.png" alt="Scissors" class="scissors">
+        <p class="scissors">Scissors</p>
+      </div>
+    </div>
+    <table class="statsBox" id="statsBox">
+      <tr>
+        <td rowspan="2" colspan="2" class="label">This round:</th>
+        <td rowspan="2" class="thisRound">0</td>
+        <td colspan="2" class="label">You:</td>
+        <td class="userChoice"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="label">Computer:</td>
+        <td class="computerChoice"></td>
+      </tr>
+      <tr>
+        <td class="label">Wins:</td>
+        <td class="wins">0</td>
+        <td class="label">Losses:</td>
+        <td class="losses">0</td>
+        <td class="label">Draws:</td>
+        <td class="draws">0</td>
+      </tr>
+      <tr>
+        <td class="results" colspan="6">Click your choice above to start</td>
+      </tr>
+    </table>
   </div>
   <script type="text/javascript"  src="rock-paper-scissors.js" defer></script>
 </body>

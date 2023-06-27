@@ -1,76 +1,129 @@
-const moves = [ 'rock', 'paper', 'scissors' ];
-/*
-const playerSelection = moves[0];
-const computerSelection = getComputerChoice();
-*/
+const MOVES = [ 'rock', 'paper', 'scissors' ];
+const DRAW = -1;
+const LOSS = 0;
+const WIN = 1;
+const weapons = document.querySelectorAll('.weapon');
+let userWins = 0;
+let userLosses = 0;
+let draws = 0;
+let rounds = 0;
 
 function getComputerChoice() {
-  pick = Math.floor(((Math.random() * 100) + 1) % 3);
-  return moves[pick];
+  let pick = Math.floor(Math.random() * 3); /* Gives 0 - 2 */
+  return MOVES[pick];
 }
 
-function playRound(playerSelection, computerSelection) {
-  if (playerSelection == computerSelection) {
-    console.log(`It's a draw! You both chose ${playerSelection}.`);
-    return 0;
+function checkWinner(playerSelection, computerSelection) {
+  if (playerSelection === computerSelection) {
+    return DRAW;
   }
   else if (
     playerSelection === 'rock' && computerSelection === 'scissors' ||
     playerSelection === 'paper' && computerSelection === 'rock' ||
     playerSelection === 'scissors' && computerSelection === 'paper'
   ) {
-    console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
-    return 1;
+    return WIN;
   }
   else {
-    console.log(`You lose! ${playerSelection} is beaten by ${computerSelection}!`);
-    return 0;
+    return LOSS;
   }
 }
 
-function getPlayerChoice() {
-  let keepGoing = true;
-  let userChoice;
-  let message = "Pick your weapon";
+weapons.forEach(weapon => {
+  weapon.addEventListener('mouseenter', highlightWeapon);
+  weapon.addEventListener('mouseleave', removeHighlight);
+  weapon.addEventListener('click', playRound, { capture: true});
+});
 
-  while (keepGoing) {
-    userChoice = prompt(`${message}: ${moves.join(', ')}:`);
+function highlightWeapon(e) {
+  e.stopPropagation();
+  const rock = document.querySelector("img.rock");
+  const paper = document.querySelector("img.paper");
+  const scissors = document.querySelector("img.scissors");
+  const rockLabel = document.querySelector("p.rock");
+  const paperLabel = document.querySelector("p.paper");
+  const scissorsLabel = document.querySelector("p.scissors");
 
-    if (userChoice === null) {
-      return userChoice;
-    }
-
-    userChoice = userChoice.toLowerCase();
-
-    if (userChoice === moves[0] || userChoice === moves[1] || userChoice == moves[2]) {
-      keepGoing = false;
-    }
-    else {
-      console.log("That's not quite right. Try again. Check your spelling.");
-      message = "Let's try that again, pick your weapon"
-    }
+  if (this.id === "rock") {
+    rock.src = "img/Rock-sel.png";
+    rockLabel.style.color = "#ee7c51";
   }
-  
-  return userChoice;
+  else if (this.id === "paper") {
+    paper.src = "img/Paper-sel.png";
+    paperLabel.style.color = "#ee7c51";
+  }
+  else if (this.id === "scissors") {
+    scissors.src = "img/Scissors-sel.png";
+    scissorsLabel.style.color = "#ee7c51";
+  }
 }
 
-function game() {
-  console.log("Rock, Paper, Scissors... best of five");
-  let wins = 0;
-  
-  for (let round = 0; round < 5; round++) {
-    console.log(`Round ${round + 1}...`);
+function removeHighlight(e) {
+  e.stopPropagation();
+  const rock = document.querySelector("img.rock");
+  const paper = document.querySelector("img.paper");
+  const scissors = document.querySelector("img.scissors");
+  const rockLabel = document.querySelector("p.rock");
+  const paperLabel = document.querySelector("p.paper");
+  const scissorsLabel = document.querySelector("p.scissors");
 
-    let computerSelection = getComputerChoice();
-    let playerSelection  = getPlayerChoice();
+  if (this.id === "rock") {
+    rock.src = "img/Rock-nbg.png";
+    rockLabel.style.color = "#000";
+  }
+  else if (this.id === "paper") {
+    paper.src = "img/Paper-nbg.png";
+    paperLabel.style.color = "#000";
+  }
+  else if (this.id === "scissors") {
+    scissors.src = "img/Scissors-nbg.png";
+    scissorsLabel.style.color = "#000";
+  }
+}
 
-    if (playerSelection === null) {
-      console.log("You have chosen to stop playing.");
-      return;
-    }
+function playRound(e) {
+  e.stopPropagation();
 
-    wins += playRound(playerSelection, computerSelection);
+  const computerChoice = getComputerChoice();
+  const userChoice = this.id;
 
-    console.log(`${wins} win${wins>1?'s':''} in ${round+1} round${(round+1)>1?'s':''}.`);
+  const userChoiceCell = document.querySelector("td.userChoice");
+  const computerChoiceCell = document.querySelector("td.computerChoice");
+  const roundsCell = document.querySelector("td.thisRound");
+  const resultsCell = document.querySelector("td.results");
+  const winsCell = document.querySelector("td.wins");
+  const lossesCell = document.querySelector("td.losses");
+  const drawsCell = document.querySelector("td.draws");
+
+  userChoiceCell.textContent = userChoice;
+  computerChoiceCell.textContent = computerChoice;
+
+  rounds++;
+  roundsCell.textContent = rounds;
+
+  switch (checkWinner(userChoice, computerChoice)) {
+    case DRAW:
+      draws++;
+      resultsCell.textContent = "Draw";
+      resultsCell.style.color = "blue";
+      resultsCell.style.borderColor = "blue";
+      drawsCell.textContent = draws;
+      break;
+    case LOSS:
+      userLosses++;
+      resultsCell.textContent = "You lose!";
+      resultsCell.style.color = "red";
+      resultsCell.style.borderColor = "red";
+      lossesCell.textContent = userLosses;
+      break;
+    case WIN:
+      userWins++;
+      resultsCell.textContent = "You win!";
+      resultsCell.style.color = "green";
+      resultsCell.style.borderColor = "green";
+      winsCell.textContent = userWins;
+      break;
+    default:
+      console.log("Error: This should never happen!");
   }
 }
