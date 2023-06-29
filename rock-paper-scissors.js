@@ -88,9 +88,13 @@ function playRound(e) {
   const computerChoice = getComputerChoice();
   const userChoice = e.currentTarget.id; /*
                                this.id === e.currentTarget
-                               because we've set capture to true (deepest element first)
-                               in the click event of div.weapon, div.weapon would be the currentTarget
-                               even when we click on the image or p/text
+                               `e.currentTarget` points to the element where 
+                               `e.target` is the innermost element that the user interacted with
+                               `capture: true` was set because:
+                                 - there's a chance the event will be triggered when user clicks
+                                   on gaps between `img` and `p`
+                                 - we want to handle the event on div.weapon first
+                                   and not let it run on `img` and `p`
                                */
 
   const userChoiceCell = document.querySelector("td.userChoice");
